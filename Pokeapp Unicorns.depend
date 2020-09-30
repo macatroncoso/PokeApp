@@ -1,0 +1,26 @@
+# depslib dependency file v1.0
+1599081395 source:c:\users\macar\desktop\pokeapp unicorns\list.c
+	<string.h>
+	"list.h"
+
+1598460905 c:\users\macar\desktop\pokeapp unicorns\list.h
+	<stdlib.h>
+	<stdio.h>
+
+1601503530 source:c:\users\macar\desktop\pokeapp unicorns\main.c
+	<stdio.h>
+	<stdlib.h>
+	"list.h"
+	"hashmap.h"
+
+1601509790 c:\users\macar\desktop\pokeapp unicorns\hashmap.h
+
+1601504618 source:c:\users\macar\desktop\pokeapp unicorns\funciones.c
+	"funciones.h"
+
+1601504563 c:\users\macar\desktop\pokeapp unicorns\funciones.h
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	"list.h"
+

@@ -6,18 +6,38 @@
 #include <stdbool.h>
 #include "list.h"
 
-typedef struct Game{
- char * name;
- char * brand;
- List * types;
- int minPlayers;
- int maxPlayers;
- char * baseGame;
+typedef struct poke_storage{
+    char * name;
+    char * gender;
+    int id;
+     int combat_power;
+     int health_points;
+    }poke_storage;  //arbol binario /   table hash
 
-}Game;
+     typedef struct pokedex{
+    char * name;
+    int  amountOf_pokemon;
+    List* types;
+     char * prev_evolution;
+     char * next_evolution;
+    int  poke_number;
+    char * region;
+    }Pokedex;
+
+   typedef struct new_pokemon{
+    char * name;
+    List* types;
+     char * prev_evolution;
+     char * next_evolution;
+    int  poke_number;
+    char * region;
+    char * gender;
+    int combat_power;
+     int health_points;
+
+    }new_pokemon;
 
 
-Game * createGame(char * , char * , List * , int , int , char * );
 
 const char *get_csv_field (char * , int );
 void importGames(List*);
