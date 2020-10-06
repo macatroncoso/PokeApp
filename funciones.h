@@ -5,12 +5,14 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "list.h"
+#include "hashmap.h"
+#include "treemap.h"
 
 typedef struct poke_storage{
     char * name;
     char * gender;
     int id;
-     int combat_power;
+     int combat_points;
      int health_points;
     }poke_storage;  //arbol binario /   table hash
 
@@ -24,26 +26,34 @@ typedef struct poke_storage{
     char * region;
     }Pokedex;
 
-   typedef struct new_pokemon{
-    char * name;
-    List* types;
-     char * prev_evolution;
-     char * next_evolution;
-    int  poke_number;
-    char * region;
-    char * gender;
-    int combat_power;
-     int health_points;
-
-    }new_pokemon;
 
 
 
 const char *get_csv_field (char * , int );
-void importGames(List*);
+
+char * toString(int );
+
+void searchByNamePokedex(HashMap * );
+
+int nonrepeatedPokedex(HashMap * , char * );
+
+int nonrepeatedStorage (HashMap * , char * );
+
+void  * importAndExport(HashMap* ,HashMap*,TreeMap * , TreeMap *);
+
+int lower_than_string(void* , void* );
+
+void searchByType(HashMap * );
+
+poke_storage * create_pokemon_S(char * ,int , char *  , int  , int  );
+
+void * catchPokemon (HashMap * ,HashMap *,TreeMap * , TreeMap * , int  );
+
+Pokedex * create_pokemon_P(char * , List * , char *  , char *  , char * ,int );
+
+void showPokemonInformation(Pokedex * );
+
 void getTypes(List *, char * );
-addNewGame(List * );
-void exportGames(List * );
 
 
 #endif // funciones_h

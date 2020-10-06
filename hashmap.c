@@ -6,7 +6,7 @@
 #include "hashmap.h"
 
 typedef struct Pair Pair;
-typedef struct HashMap HashMap;
+typedef struct HashMap;
 int enlarge_called=0;
 
 struct Pair {
@@ -26,6 +26,10 @@ Pair * createPair( char * key,  void * value) {
     new->key = key;
     new->value = value;
     return new;
+}
+
+long mapsize(HashMap* map){
+return map->size ;
 }
 
 long hash( char * key, long capacity) {
@@ -49,8 +53,8 @@ int position = hash(key,map->capacity);
 int i;
 Pair * uwu = createPair(key,value);
 
-for (i = position ; position <= map->capacity ;i++){
-  if ((map->buckets[i] == NULL) || (uwu->key == NULL)){
+for (i = position ; position < map->capacity ;i++){
+  if ((map->buckets[i] == NULL) || (map->buckets[i]->key == NULL)){
     map->buckets[i] = uwu;
     map->size++;
     break;
@@ -84,17 +88,16 @@ for (i=0;i<oldcap;i++){
 
 
 
-
-
 HashMap * createMap(long capacity) {
   HashMap * mappsi = (HashMap*) malloc(sizeof(HashMap));
   mappsi->buckets = (Pair **) calloc(capacity, sizeof(Pair *));
   mappsi-> capacity = capacity;
+  mappsi->size = 0;
   mappsi-> current = -1;
 return mappsi;
 }
 
-void eraseMap(HashMap * map,  char * key) {    
+void eraseMap(HashMap * map,  char * key) {
  int iwi = hash(key,map->capacity);
  int i;
  for (i = iwi;iwi<map->capacity;i++){
@@ -113,18 +116,28 @@ void eraseMap(HashMap * map,  char * key) {
 
 }
 
-void * searchMap(HashMap * map,  char * key) {   
-   int possibly = hash(key,map->capacity);
-   int i;
-   for (i = possibly;possibly < map->capacity;i++){
-     if (map->buckets[i] != NULL){
-      if (is_equal(key, map->buckets[i]->key ) == 1){
-        map->current = i;
-        return  map->buckets[i]->value;
-      }
-    }
-    else
-    break;
+void * searchMap(HashMap * map,  char * key) {
+
+    int possibly = hash(key,map->capacity);
+
+    int i;
+
+    for (i = possibly; possibly < map->capacity; i++){
+
+        if (map->buckets[i] != NULL && map->buckets[i]->key != NULL){
+            if (is_equal(key, map->buckets[i]->key ) == 1){
+                map->current = i;
+                return  map->buckets[i]->value;
+            }
+
+            if(i == map->capacity - 1) i = 0;
+        }
+        else{
+
+            break;
+
+        }
+
    }
 
     return NULL;
@@ -141,13 +154,29 @@ int i;
  return NULL;
 }
 
+
+void * prevMap(HashMap * map) {
+int i;
+
+ for (i = (map->current)-1; i >= 0;i--){
+
+   if (map->buckets[i]!= NULL ){
+
+  map->current= i;
+   return map->buckets[i]->value;
+  }
+ }
+    return NULL;
+}
+
+
 void * nextMap(HashMap * map) {
 int i;
 
  for (i = (map->current)+1; i < map->capacity;i++){
 
    if (map->buckets[i]!= NULL ){
-  
+
   map->current= i;
    return map->buckets[i]->value;
   }

@@ -3,12 +3,16 @@
 #include "list.h"
 #include "hashmap.h"
 #include "funciones.h"
+#include "treemap.h"
 
 int main()
 {
 
-    List * Pokemon = create_list();
-
+    HashMap * pokeStorageMap = createMap(500);
+    HashMap * PokedexMap = createMap(500);
+    TreeMap * pokeStorageTree = createTreeMap(lower_than_string);
+    TreeMap * PokedexTree = createTreeMap(lower_than_string);
+    int contid = 0;
 
 
     int option; //a number to guide our menu :3
@@ -22,7 +26,7 @@ int main()
     printf("Option 2 <3 : Catch a Pokemon! \n");
     printf("Option 3 <3 : Search Pokemon by type/s \n");
     printf("Option 4 <3 : Search Pokemon by Name \n");
-    printf("Option 5 <3 : Search Pokemon by number on the Pokedex \n");
+    printf("Option 5 <3 : Search Pokemon Name on the Pokedex \n");
     printf("Option 6 <3 : Show all the Pokemon on the Pokedex \n");
     printf("Option 7 <3 : Show Pokemon by higher CP  \n");
     printf("Option 8 <3 : Show Pokemon by higher HP \n");
@@ -37,26 +41,15 @@ int main()
         }while ((option > 11) || (option < 1));  //this "While" validates that the option entered is valid!
 
         switch(option){
-            case 1: importGames(games);
+            case 1: contid = importAndExport(PokedexMap,pokeStorageMap,PokedexTree,pokeStorageTree);
             break;
-            case 2: exportGames(games);
+            case 2:  contid = catchPokemon (PokedexMap,pokeStorageMap,PokedexTree,pokeStorageTree,contid );
             break;
-            case 3: addNewGame(games);
+            case 3: searchByType(PokedexMap);
             break;
-            case 4: searchByName(games);
+            case 5: searchByNamePokedex(PokedexMap);
             break;
-            case 5: searchByType(games);
-            break;
-            case 6:  searchByPlayers(games);
-            break;
-            case 7: searchByBrand(games);
-            break;
-            case 8: searchByCategories(games);
-            break;
-            case 9: printgames (games);
-            break;
-            case 10: printextensions (games);
-            break;
+
         }
 
         if(option == 11){

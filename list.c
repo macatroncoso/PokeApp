@@ -1,218 +1,265 @@
+/**
+ MIT License
 
-#include <string.h>
+ Copyright (c) 2018 Matias Barrientos.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+ */
+
 #include "list.h"
+#include <stdlib.h>
+#include <assert.h>
 
-/*
-  ants
-*/
-#define ARRAYLIST_INITIAL_CAPACITY 10
-#define ARRAYLIST_CAPACITY_DELTA 10
+typedef struct Node Node;
 
-/*
-  constants
-*/
-#undef TRUE
-#define TRUE 1
+static Node * createNode(void * data);
 
-#undef FALSE
-#define FALSE 0
+struct Node {
+    /*! Puntero al dato */
+    void * data;
 
+    /*! Puntero al siguiente nodo */
+    Node * next;
 
-/*
-  type definitions
-*/
-#undef Boolean
-#define Boolean short unsigned int
-
-#undef Object
-#define Object void*
-
-typedef struct Arraylist_Struct *Arraylist;
-typedef struct Arraylist_Struct List;
-
-static  size_t object_size = sizeof(Object);
-
-
-/*
-  structures
-*/
-struct Arraylist_Struct {
-  int _current_capacity;
-  Object *_data;
-  int _size;
-   Boolean (*_equals)();
-  int _current_index;
+    /*! Puntero al anterior nodo */
+    Node * prev;
 };
 
+struct List {
+    /*! Puntero al incio (cabeza) de la lista */
+    Node * head;
 
-/*
-  private function declarations
-*/
-static void *checked_malloc( size_t size);
+    /*! Puntero al final (cola) de la lista */
+    Node * tail;
 
+    /*! Punteor para poder recorrer la lista */
+    Node * current;
 
-void arraylist_free( Arraylist list)
-{
-  free(list->_data);
-  free(list);
+    /*! Cantidad de elemento en la lista */
+    long count;
+};
+
+static Node * createNode(void * data) {
+    Node * new = (Node *)malloc(sizeof(Node));
+    assert(new != NULL); // No hay memoria para reservar el Nodo.
+    new->data = data;
+    new->prev = NULL;
+    new->next = NULL;
+    return new;
 }
 
-Arraylist arraylist_create()
-{
-  Arraylist list;
-
-#ifdef GOK_DEBUG
-  list = malloc(sizeof(struct Arraylist_Struct));
-#else
-  list = checked_malloc(sizeof(struct Arraylist_Struct));
-#endif
-  list->_current_capacity = ARRAYLIST_INITIAL_CAPACITY;
-#ifdef GOK_DEBUG
-  list->_data = malloc(object_size * list->_current_capacity);
-#else
-  list->_data = checked_malloc(object_size * list->_current_capacity);
-#endif
-  list->_size = 0;
-  //list->_equals = equals;
-
-  return list;
+List * create_list() {
+    List * new = (List *)malloc(sizeof(List));
+    assert(new != NULL); // No hay memoria para reservar la Lista.
+    new->head = new->tail = new->current = NULL;
+    new->count = 0;
+    return new;
 }
 
-Boolean arraylist_add( Arraylist list, Object object)
-{
-  int old_size = arraylist_size(list);
-  int new_capacity;
-  Object *new_data;
+long listCount(List * list) {
+    assert(list != NULL); // list no puede ser NULL.
 
-  (list->_size)++;
-  if (old_size == list->_current_capacity)
-    {
-      new_capacity = list->_current_capacity + ARRAYLIST_CAPACITY_DELTA;
-#ifdef GOK_DEBUG
-      new_data = malloc(object_size * new_capacity);
-#else
-      new_data = checked_malloc(object_size * new_capacity);
-#endif
-      memcpy(new_data, list->_data, object_size * old_size);
-      free(list->_data);
-      (list->_data) = new_data;
-      list->_current_capacity = new_capacity;
-    }
-  (list->_data)[old_size] = object;
-  return TRUE;
+    if (list->head == NULL) return 0;
+
+    return list->count;
 }
 
-Boolean arraylist_remove( Arraylist list,  int index)
-{
-  int length = arraylist_size(list);
-  int last_index = length - 1;
-  int new_size, new_capacity;
-
-  (list->_size)--;
-  if (index < last_index)
-    {
-      memmove(list->_data + index, list->_data + index + 1, object_size * (last_index - index));
-      new_size = list->_size;
-      new_capacity = list->_current_capacity - ARRAYLIST_CAPACITY_DELTA;
-      if (new_capacity > new_size)
-    {
-      list->_data = realloc(list->_data, object_size * new_capacity);
-      list->_current_capacity = new_capacity;
-    }
-    }
-  return TRUE;
-
-
+int emptyList(List * list) {
+    assert(list != NULL); // list no puede ser NULL.
+    return list->count == 0;
 }
 
+void * first(List * list) {
+    if(list == NULL ) return NULL; // list no puede ser NULL.
 
+    if (list->head == NULL) return NULL;
 
+    list->current = list->head;
 
-Boolean arraylist_is_empty( Arraylist list)
-{
-  return (0 == arraylist_size(list));
+    return (void *)list->current->data;
 }
 
-int arraylist_size( Arraylist list)
-{
-  return list->_size;
+void * next(List * list) {
+    if(list == NULL) return NULL; // list no puede ser NULL.
+
+    if (list->head == NULL || list->current == NULL || list->current->next == NULL) return NULL;
+
+    list->current = list->current->next;
+
+    return (void *)list->current->data;
 }
 
-Object arraylist_get( Arraylist list,  int index)
-{
-  list->_current_index = index;
-  return list->_data[index];
+void * last(List * list) {
+    if(list == NULL) return NULL; // list no puede ser NULL.
+
+    if (list->head == NULL) return NULL;
+
+    list->current = list->tail;
+
+    return (void *)list->current->data;
 }
 
-void arraylist_clear( Arraylist list)
-{
-  list->_data = realloc(list->_data, object_size * ARRAYLIST_INITIAL_CAPACITY);
-  list->_current_capacity = ARRAYLIST_INITIAL_CAPACITY;
-  list->_size = 0;
+void * prev(List * list) {
+    if(list == NULL) return NULL; // list no puede ser NULL.
+
+    if (list->head == NULL || list->current == NULL || list->current->prev == NULL) return NULL;
+
+    list->current = list->current->prev;
+
+    return (void *)list->current->data;
 }
 
-void arraylist_sort( Arraylist list,  int (*compare)( Object object_1,  Object object_2))
-{
-  qsort(list->_data,
-	arraylist_size(list),
-	sizeof(Object),
-	(int (*)())compare);
-}
+void push_front(List * list, void * data) {
+    assert(list != NULL); // list no puede ser NULL.
 
-static void *checked_malloc( size_t size)
-{
-  void *data;
+    Node * new = createNode(data);
 
-  data = malloc(size);
-  if (data == NULL)
-    {
-      fprintf(stderr, "\nOut of memory.\n");
-      fflush(stderr);
-      exit(EXIT_FAILURE);
+    if (list->head == NULL) {
+        list->tail = new;
+    } else {
+        new->next = list->head;
+        list->head->prev = new;
     }
 
-  return data;
+    list->head = new;
+    list->count += 1;
 }
 
-void arraylist_free(List* list);
-List* create_list(){
-    return arraylist_create();
+void push_back(List * list, void * data) {
+    assert(list != NULL); // list no puede ser NULL.
+
+    Node * new = createNode(data);
+
+    if (list->head == NULL) {
+        list->head = new;
+    } else {
+        list->tail->next = new;
+        new->prev = list->tail;
+    }
+
+    list->tail = new;
+    list->count += 1;
 }
 
-void push_back(List* L, void* object){
-    arraylist_add(L, object);
+void push_current(List * list, void * data) {
+    assert(list != NULL); // list no puede ser NULL.
+
+    if (list->current == NULL) return;
+
+    Node * new = createNode(data);
+
+    new->next = list->current->next;
+    new->prev = list->current;
+
+    if (list->current->next != NULL) {
+        list->current->next->prev = new;
+    }
+
+    list->current->next = new;
+
+    if (list->current == list->tail) {
+        list->tail = new;
+    }
+
+    list->count += 1;
 }
 
-void pop_front(List* L){
-    arraylist_remove(L, 0);
+void pop_front(List * list) {
+    assert(list != NULL); // list no puede ser NULL.
+
+    if (list->head == NULL) return;
+
+    Node * aux = list->head;
+
+    void * data = (void *)aux->data;
+
+    if (list->head == list->tail) {
+        list->tail = list->head = NULL;
+    } else {
+        list->head = list->head->next;
+        list->head->prev = NULL;
+    }
+
+    free(aux);
+
+    list->count -= 1;
+
 }
 
-void pop_back(List* L){
-    arraylist_remove(L, L->_size-1);
+void pop_back(List * list) {
+    assert(list != NULL); // list no puede ser NULL.
+
+    if (list->head == NULL) return;
+
+    Node * aux = list->tail;
+
+    void * data = (void *)aux->data;
+
+    if (list->tail == list->head) {
+        list->tail = list->head = NULL;
+    } else {
+        list->tail = list->tail->prev;
+        list->tail->next = NULL;
+    }
+
+    free(aux);
+
+    list->count -= 1;
+
 }
 
-void pop_current(List* L){
-    arraylist_remove(L, L->_current_index);
+void pop_current(List * list) {
+    assert(list != NULL); // list no puede ser NULL.
+
+    if (list->head == NULL || list->current == NULL) return;
+
+    Node * aux = list->current;
+
+    if (list->current == list->head) {
+        pop_front(list); return;
+    } else if (list->current == list->tail) {
+        pop_back(list); return;
+    } else {
+        if (aux->next != NULL) {
+            aux->next->prev = aux->prev;
+        }
+
+        if (aux->prev != NULL) {
+            aux->prev->next = aux->next;
+        }
+    }
+
+    void * data = (void *)aux->data;
+
+    list->current = aux->next;
+
+    free(aux);
+
+    list->count -= 1;
+
 }
 
-int is_empty(List* L){
-   return arraylist_is_empty(L);
+void removeAllList(List * list) {
+    assert(list != NULL); // list no puede ser NULL.
+
+    while (list->head != NULL) {
+        pop_front(list);
+    }
 }
 
-int size(List* L){
-    return arraylist_size(L);
-}
-
-void* first(List* L){
-    return arraylist_get(L, 0);
-}
-
-void* next(List* L){
-    L->_current_index++;
-    if(L->_current_index >= L->_size) return NULL;
-    arraylist_get(L, L->_current_index);
-}
-
-void clear(List* L){
-   arraylist_clear(L);
-}
