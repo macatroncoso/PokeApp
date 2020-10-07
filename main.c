@@ -9,6 +9,7 @@ int main()
 {
 
     HashMap * pokeStorageMap = createMap(500);
+    HashMap * pokeStorageRegion = createMap(500);
     HashMap * PokedexMap = createMap(500);
     TreeMap * pokeStorageTree = createTreeMap(lower_than_string);
     TreeMap * PokedexTree = createTreeMap(lower_than_string);
@@ -41,13 +42,17 @@ int main()
         }while ((option > 11) || (option < 1));  //this "While" validates that the option entered is valid!
 
         switch(option){
-            case 1: contid = importAndExport(PokedexMap,pokeStorageMap,PokedexTree,pokeStorageTree);
+            case 1: contid = importAndExport(PokedexMap,pokeStorageMap,PokedexTree,pokeStorageTree,pokeStorageRegion);
             break;
-            case 2:  contid = catchPokemon (PokedexMap,pokeStorageMap,PokedexTree,pokeStorageTree,contid );
+            case 2:  contid = catchPokemon (PokedexMap,pokeStorageMap,PokedexTree,pokeStorageTree,contid,pokeStorageRegion );
             break;
             case 3: searchByType(PokedexMap);
             break;
+            case 4: searchByName(pokeStorageMap);
+            break;
             case 5: searchByNamePokedex(PokedexMap);
+            break;
+            case 10: MostrarPokemonPokedex(pokeStorageRegion);
             break;
 
         }

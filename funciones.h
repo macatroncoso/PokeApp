@@ -35,11 +35,11 @@ char * toString(int );
 
 void searchByNamePokedex(HashMap * );
 
-int nonrepeatedPokedex(HashMap * , char * );
+void searchByName(HashMap * );
 
-int nonrepeatedStorage (HashMap * , char * );
+void showCombatInformation(poke_storage * );
 
-void  * importAndExport(HashMap* ,HashMap*,TreeMap * , TreeMap *);
+void  * importAndExport(HashMap* ,HashMap*,TreeMap * , TreeMap *, HashMap * );
 
 int lower_than_string(void* , void* );
 
@@ -47,7 +47,7 @@ void searchByType(HashMap * );
 
 poke_storage * create_pokemon_S(char * ,int , char *  , int  , int  );
 
-void * catchPokemon (HashMap * ,HashMap *,TreeMap * , TreeMap * , int  );
+void * catchPokemon (HashMap * ,HashMap *,TreeMap * , TreeMap * , int , HashMap * );
 
 Pokedex * create_pokemon_P(char * , List * , char *  , char *  , char * ,int );
 

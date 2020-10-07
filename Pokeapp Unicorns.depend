@@ -1,33 +1,36 @@
 # depslib dependency file v1.0
-1601870858 source:c:\users\macar\desktop\pokeapp unicorns\list.c
-	<string.h>
+1601959105 source:c:\users\macar\desktop\pokeapp unicorns\list.c
 	"list.h"
+	<stdlib.h>
+	<assert.h>
 
-1598460905 c:\users\macar\desktop\pokeapp unicorns\list.h
+1601926334 c:\users\macar\desktop\pokeapp unicorns\list.h
 	<stdlib.h>
 	<stdio.h>
 
-1601875566 source:c:\users\macar\desktop\pokeapp unicorns\main.c
+1602101097 source:c:\users\macar\desktop\pokeapp unicorns\main.c
 	<stdio.h>
 	<stdlib.h>
 	"list.h"
 	"hashmap.h"
 	"funciones.h"
+	"treemap.h"
 
 1601509790 c:\users\macar\desktop\pokeapp unicorns\hashmap.h
 
-1601920524 source:c:\users\macar\desktop\pokeapp unicorns\funciones.c
+1602103778 source:c:\users\macar\desktop\pokeapp unicorns\funciones.c
 	"funciones.h"
 	<stdbool.h>
 
-1601872464 c:\users\macar\desktop\pokeapp unicorns\funciones.h
+1602103723 c:\users\macar\desktop\pokeapp unicorns\funciones.h
 	<stdio.h>
 	<stdlib.h>
 	<stdbool.h>
 	"list.h"
 	"hashmap.h"
+	"treemap.h"
 
-1601873840 source:c:\users\macar\desktop\pokeapp unicorns\hashmap.c
+1601959979 source:c:\users\macar\desktop\pokeapp unicorns\hashmap.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -126,6 +129,61 @@
 	"treemap.h"
 
 1601959763 source:c:\users\ideapad 330\desktop\pokeapp unicorns real\pokeapp unicorns\funciones.c
+	"funciones.h"
+	<stdbool.h>
+
+1601943858 c:\users\macar\desktop\pokeapp unicorns\treemap.h
+
+1602095778 source:c:\users\macar\desktop\pokeapp unicorns\treemap.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"treemap.h"
+
+1601959979 source:c:\users\ideapad 330\desktop\pokeapp unicorns\hashmap.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<math.h>
+	<ctype.h>
+	"hashmap.h"
+
+1601509790 c:\users\ideapad 330\desktop\pokeapp unicorns\hashmap.h
+
+1601959105 source:c:\users\ideapad 330\desktop\pokeapp unicorns\list.c
+	"list.h"
+	<stdlib.h>
+	<assert.h>
+
+1601926334 c:\users\ideapad 330\desktop\pokeapp unicorns\list.h
+	<stdlib.h>
+	<stdio.h>
+
+1601963309 source:c:\users\ideapad 330\desktop\pokeapp unicorns\main.c
+	<stdio.h>
+	<stdlib.h>
+	"list.h"
+	"hashmap.h"
+	"funciones.h"
+	"treemap.h"
+
+1601963264 c:\users\ideapad 330\desktop\pokeapp unicorns\funciones.h
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	"list.h"
+	"hashmap.h"
+	"treemap.h"
+
+1601943858 c:\users\ideapad 330\desktop\pokeapp unicorns\treemap.h
+
+1601963486 source:c:\users\ideapad 330\desktop\pokeapp unicorns\treemap.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"treemap.h"
+
+1602037759 source:c:\users\ideapad 330\desktop\pokeapp unicorns\funciones.c
 	"funciones.h"
 	<stdbool.h>
 
