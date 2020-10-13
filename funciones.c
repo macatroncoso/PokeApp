@@ -97,6 +97,7 @@ void showCombatInformation(poke_storage * puchi){
 }
 
 void searchByName(HashMap * pokeStorageMap){
+
     system("cls");
 
     printf("Please enter the name of the pokemon you are looking for: ");
@@ -107,17 +108,22 @@ void searchByName(HashMap * pokeStorageMap){
     bool found = false;
 
     List * listadepokemones = searchMap(pokeStorageMap,name_);
-    if (listadepokemones!=NULL){
-        showCombatInformation(first(listadepokemones));
-        for (int i =1; i<listCount(listadepokemones); i++){
-            showCombatInformation(next(listadepokemones));
+    poke_storage * pukistorage = first(listadepokemones);
+
+    while(pukistorage != NULL){
+
+        if(strcmp(pukistorage->name, name_) == 0){
+
+            showCombatInformation(pukistorage);
+            return;
+
         }
-        found=true;
+
+        next(listadepokemones);
     }
 
-    if(found == false) {
-        printf("\nWe could not find a Pokemon that matches that type  :(\n\n");
-    }
+    printf("\nWe could not find a Pokemon that matches that type  :(\n\n");
+
     system("pause");
     system("cls");
 
@@ -773,3 +779,59 @@ void showPokemonInfo3(poke_storage * pokeS){ //Show info from Storage, output
     printf("%d \n", pokeS->health_points);//print the health points
 }
 
+void ReleasePokemon( HashMap * PokedexMap, HashMap * pokeStorageMap)
+{
+    char name[25];
+    printf("Please enter the name of the Pokemon you want to release :smile: \n");
+    fflush(stdin);
+    scanf("%[^\n]s",name);
+    fflush(stdin);
+    int id;
+    printf("Please enter the id of the Pokemon you want to release :smile: \n");
+    scanf("%d",&id);
+    fflush(stdin);
+
+    Pokedex * pukidex = searchMap(PokedexMap, name);
+
+    if(pukidex==NULL)
+    {
+        printf("the Pokemon was not found \n");
+        return;
+    }
+
+    List * pokelist = searchMap(pokeStorageMap, pukidex->name);
+
+    if(pokelist == NULL)
+    {
+        printf("the Pokemon was not found \n");
+        return;
+    }
+
+    poke_storage * pukistorage = first(pokelist);
+
+    if(pukidex->amountOf_pokemon == 1){
+
+        //if there is only one data, we delete the list
+        pukidex->amountOf_pokemon--;
+        removeAllList(pokelist);
+        return;
+    }
+
+    while(pukistorage != NULL){
+
+        if(pukistorage->id == id){
+
+            pukidex->amountOf_pokemon--;
+            pop_current(pokelist);
+
+            return;
+
+        }
+
+        pukistorage = next(pokelist);
+
+    }
+
+    printf("No pokemon with the given id was found\n");
+
+}
