@@ -86,7 +86,7 @@ int lower_than_int(void* key1, void* key2){ //This function compare 2 keys *int
 void showCombatInformation(poke_storage * puchi){
 
 
-  // this function is very important to our program, because it's used in almost all the functions that search by a category
+  // esta funcion muestra la informacion de combate de los pokemon
     printf("\n");
     printf("Pokemon's name: %s\n", puchi->name); //print the name
     printf("pokemon's ID: %d\n", puchi->id); //print the brand
@@ -99,7 +99,7 @@ void showCombatInformation(poke_storage * puchi){
 void searchByName(HashMap * pokeStorageMap){
 
     system("cls");
-
+    // se pide al usuario que digite el nombre del pokemon que se busca
     printf("Please enter the name of the pokemon you are looking for: ");
     char name_[50];
     fflush(stdin);
@@ -107,13 +107,14 @@ void searchByName(HashMap * pokeStorageMap){
     fflush(stdin);
     bool found = false;
 
+    // se crea una lista de pokemones y a la vez se busca en el pokeStorageMap con su respectivo nombre 
     List * listadepokemones = searchMap(pokeStorageMap,name_);
     poke_storage * pukistorage = first(listadepokemones);
 
     while(pukistorage != NULL){
 
         if(strcmp(pukistorage->name, name_) == 0){
-
+             // si se encuentra el nombre que ingreso el usuario, se muestra la informacion de combate del pokemon 
             showCombatInformation(pukistorage);
             return;
 
@@ -121,8 +122,8 @@ void searchByName(HashMap * pokeStorageMap){
 
         next(listadepokemones);
     }
-
-    printf("\nWe could not find a Pokemon that matches that type  :(\n\n");
+    // No se encuentró el pokemon buscado
+    printf("\nWe could not find a Pokemon  :(\n\n");
 
     system("pause");
     system("cls");
@@ -131,15 +132,16 @@ void searchByName(HashMap * pokeStorageMap){
 
 void MostrarPokemonPokedex(HashMap * pokeStorageRegion){
     system("cls");
-    //Kanto
-
+    
+   // el usuario ingresa la region a buscar
     printf("Please enter the region: ");
     char region_[50];
     fflush(stdin);
     scanf("%[^\n]s", region_);
     fflush(stdin);
     bool found = false;
-
+ 
+    // se crea una lista de pokemones por region y a la vez se busca que exista tal region
     List * listadepokemonesPorRegion = searchMap(pokeStorageRegion,region_);
     if (listadepokemonesPorRegion==NULL){
         printf("esta nulo");
@@ -147,12 +149,14 @@ void MostrarPokemonPokedex(HashMap * pokeStorageRegion){
     if (listadepokemonesPorRegion!=NULL){
         showPokemonInformation(first(listadepokemonesPorRegion));
         for (int i =1; i<listCount(listadepokemonesPorRegion); i++){
+           //se va recorriendo a traves de un for y se va mostrando por pantalla todos los pokemones que tengan la region ingresada por el usuario
             showPokemonInformation(next(listadepokemonesPorRegion));
         }
         found=true;
     }
 
     if(found == false) {
+      // si no se encuentra
         printf("\nWe could not find the region :(\n\n");
     }
     system("pause");
