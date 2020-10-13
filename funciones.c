@@ -77,6 +77,12 @@ int lower_than_string(void* key1, void* key2){
     return 0;
 }
 
+int lower_than_int(void* key1, void* key2){ //This function compare 2 keys *int
+    int k1 = *((int*) (key1));
+    int k2 = *((int*) (key2));
+    return k1<k2;
+}
+
 void showCombatInformation(poke_storage * puchi){
 
 
@@ -296,7 +302,7 @@ char * toString(int id){
 
 }
 
-Pokedex * create_pokemon_P(char * name,  List * types, char *  prev_evolution, char *  next_evolution, char * region,int poke_number){
+Pokedex * create_pokemon_P(char * name,  List * types, char *  prev_evolution, char *  next_evolution, char * region, int  poke_number){
 
    //very important struct that creates a game with their categories
 
@@ -465,7 +471,7 @@ void  * catchPokemon (HashMap * PokedexMap, HashMap * pokeStorageMap,TreeMap * p
    return id;
 }
 
-void  * importAndExport(HashMap* PokedexMap,HashMap * pokeStorageMap,TreeMap * pokeStorageTree, TreeMap * PokedexTree,HashMap * pokeStorageRegion){
+void * importAndExport(HashMap* PokedexMap, HashMap * pokeStorageMap, TreeMap * pokeStorageTree, TreeMap * PokedexTree, HashMap * pokeStorageRegion, TreeMap * pokedexNumber, TreeMap * pokeStorageHP, TreeMap * pokeStorageCP){
     //very important function that imports all the pokemon from a csv file
 
     system("cls");
@@ -532,7 +538,7 @@ void  * importAndExport(HashMap* PokedexMap,HashMap * pokeStorageMap,TreeMap * p
 
         char * prev_evolution = get_csv_field(line, 6);
         char * next_evolution = get_csv_field(line, 7);
-        int poke_number = atoi(get_csv_field(line, 8));
+        int  poke_number =atoi(get_csv_field(line, 8));
 
         char * region = get_csv_field(line, 9);
 
@@ -540,14 +546,21 @@ void  * importAndExport(HashMap* PokedexMap,HashMap * pokeStorageMap,TreeMap * p
         poke_storage * newPoke = create_pokemon_S( name, id,  gender,   combat_points,   health_points);
 
 
-
         if (searchMap(PokedexMap, name) == NULL){
             insertMap(PokedexMap, new_poke->name ,new_poke);
-           if (searchMap(pokeStorageRegion, region) == NULL){
+
+            insertTreeMap(PokedexTree, new_poke->name ,new_poke);
+            insertTreeMap(pokedexNumber, &new_poke->poke_number ,new_poke); //Insert pokemon in PokeNumber(key) Tree Map type Pokedex
+            insertTreeMap(pokeStorageCP, &newPoke->combat_points, newPoke); //Insert pokemon in Combat Points(key) Tree Map type Storage
+            insertTreeMap(pokeStorageHP, &newPoke->health_points, newPoke); //Insert pokemon in Health Points(key) Tree Map type Storage 
+        }
+
+
+        if (searchMap(pokeStorageRegion, region) == NULL){
             List* pokelist = create_list();
             push_back(pokelist, new_poke);
             insertMap(pokeStorageRegion, new_poke->region, pokelist);
-           }
+        }
 
         else {
             List* pokelist = searchMap(pokeStorageRegion,new_poke->region);
@@ -555,17 +568,12 @@ void  * importAndExport(HashMap* PokedexMap,HashMap * pokeStorageMap,TreeMap * p
             Pokedex * pokeaux = searchMap(PokedexMap, name);
 
         }
-        }
 
-         if (searchTreeMap(PokedexTree, name) == NULL){
-            insertTreeMap(PokedexTree, new_poke->name ,new_poke);
-        }
 
         if (mapsize(pokeStorageMap)>100){
             printf("Pokemon Storage is full.");
-        return;
-         }
-
+            return;
+        }
         else{
         if (searchMap(pokeStorageMap, name) == NULL){
 
@@ -581,8 +589,8 @@ void  * importAndExport(HashMap* PokedexMap,HashMap * pokeStorageMap,TreeMap * p
             Pokedex * pokeaux = searchMap(PokedexMap, name);
             pokeaux->amountOf_pokemon++;
 
+            }
         }
-    }
 
         if (searchTreeMap(pokeStorageTree, name) == NULL){
             List* pokelistTree= create_list();
@@ -599,8 +607,6 @@ void  * importAndExport(HashMap* PokedexMap,HashMap * pokeStorageMap,TreeMap * p
 
 
         }
-
-
       cont++;
     }
     }
@@ -686,5 +692,84 @@ void  * importAndExport(HashMap* PokedexMap,HashMap * pokeStorageMap,TreeMap * p
 
     }
 
+}
+
+void  showPokedexNumber(TreeMap * pokedexNumber){ //Show all pokemons from pokedex (poke Number,lower to higher)
+    printf("\n");
+
+    if (pokedexNumber == NULL) return;
+    Pokedex * pokePokedex;
+    pokePokedex= firstTreeMap (pokedexNumber);
+
+    while (pokePokedex !=NULL){
+        showPokemonInfo2 (pokePokedex);
+        pokePokedex= nextTreeMap (pokedexNumber);
+    }
+
+
+}
+
+void showPokemonInfo2(Pokedex * pokePoke){ //Show info from pokedex, 1 line for each pokemon
+    printf("%s, ", pokePoke->name); //print the name
+    printf("%d, ", pokePoke->amountOf_pokemon); //print the brand
+    //printf(""); //print game types
+
+    char * type = first(pokePoke->types); //access to the List of types
+
+    while(type){
+
+        printf("%s, ", type); //print the types
+        type = next(pokePoke->types); //proceed to next type
+
+    }
+
+    printf("%s, ", pokePoke->prev_evolution);//print the min amount of players
+     printf("%s, ", pokePoke->next_evolution);//print the min amount of players
+    printf("%d, ", pokePoke->poke_number);//print the name of the Base Game
+   printf("%s\n", pokePoke->region);//print the name of the Base Game
+}
+
+
+void showPokeStorageCP(TreeMap * treeCP){ //Show all pokemons from storage (Combat points, higher to lower)
+    printf("\n");
+
+    if (treeCP == NULL) return; // If tree is empty
+    poke_storage * pokeAux; //auxVar to save info and show it    
+    pokeAux= lastTreeMap (treeCP); //gets the last value, higher from map
+
+    while (pokeAux != NULL){
+        showPokemonInfo3 (pokeAux);
+        pokeAux= backTreeMap (treeCP); //Previous value, lower than current
+    }
+
+}
+
+
+void showPokeStorageHP(TreeMap * treeHP){//Show all pokemons from storage (Health points, higher to lower)
+    printf("\n");
+
+    if (treeHP == NULL) return; // If tree is empty
+    poke_storage * pokeAux; //auxVar to save info and show it
+    pokeAux= lastTreeMap (treeHP);  //gets the last value, higher from map
+
+    while (pokeAux != NULL){
+        showPokemonInfo3 (pokeAux); 
+        pokeAux= backTreeMap (treeHP); //Previous value, lower than current
+    }
+
+}
+
+//Works Correctly
+void showPokemonInfo3(poke_storage * pokeS){ //Show info from Storage, output
+
+    printf("%s, ", pokeS->name); //print the name
+
+    printf("%s, ", pokeS->gender); //print the geneder
+
+    printf("%d, ", pokeS->id);//print the id
+
+     printf("%d, ", pokeS->combat_points);//print the combat points
+
+    printf("%d \n", pokeS->health_points);//print the health points
 }
 
