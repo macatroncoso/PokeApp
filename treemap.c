@@ -26,7 +26,6 @@ int isEqual(TreeMap* tree, void* key1, void* key2){
 }
 
 
-
 TreeNode * minimum(TreeNode * x){
     if (x == NULL) return NULL;
 
@@ -34,6 +33,15 @@ TreeNode * minimum(TreeNode * x){
         x = x->left;
     }
     return x;
+}
+
+TreeNode * maximum(TreeNode * exe){ //This function return node with higher value from right
+
+    while (exe->right != NULL) 
+    {
+     exe = exe->right;
+    }
+    return exe;
 }
 
 
@@ -126,8 +134,6 @@ void eraseTreeMap(TreeMap * tree, void* key){
 }
 
 
-
-
 void * searchTreeMap(TreeMap * tree, void* key) {
     if (tree == NULL || tree->root == NULL) return NULL;
 
@@ -210,3 +216,43 @@ void * nextTreeMap(TreeMap * tree) {
 
     return aux->value;
 }
+
+void * backTreeMap(TreeMap * tree){ //Go to the previous node with high value, next higher value after current
+
+
+    if (tree == NULL || tree->root == NULL || tree->current == NULL) return NULL; //This check if there is info in map
+
+    if (tree->current->left != NULL){   //Check if there's a current node son(left)
+        TreeNode * aux= tree->current->left;
+
+        tree->current= maximum(aux); //refresh current
+
+        return tree->current->value; //return the maximum value in left branch
+    }
+
+    TreeNode * aux = tree->current->parent; //Aux gets the parent value
+
+    while (aux != NULL && tree->current == aux->left){ 
+        tree->current = aux; 
+        aux= aux->parent;
+    }
+    tree->current = aux; //refresh current to work in other functions 
+    if (aux == NULL ) return NULL; 
+
+    return aux->value; //Return the value found
+
+
+}
+
+void * lastTreeMap(TreeMap * tree) { //This function return the higher value (key) from tree.
+    if (tree == NULL || tree->root == NULL) return NULL; //Check if there's info in tree and if root exist
+
+    TreeNode * aux = tree->root; //Aux to save root 
+
+    tree->current = maximum(aux); //Current gets the function value
+
+    if (tree->current == NULL) return NULL;
+
+    return tree->current->value; 
+}
+
