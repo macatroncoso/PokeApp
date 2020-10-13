@@ -12,19 +12,19 @@ typedef struct poke_storage{
     char * name;
     char * gender;
     int id;
-     int combat_points;
-     int health_points;
+    int combat_points;
+    int health_points;
     }poke_storage;  //arbol binario /   table hash
 
-     typedef struct pokedex{
+typedef struct pokedex{
     char * name;
     int  amountOf_pokemon;
     List* types;
-     char * prev_evolution;
-     char * next_evolution;
-    int  poke_number;
+    char * prev_evolution;
+    char * next_evolution;
+    int   poke_number;
     char * region;
-    }Pokedex;
+}Pokedex;
 
 
 
@@ -39,9 +39,11 @@ void searchByName(HashMap * );
 
 void showCombatInformation(poke_storage * );
 
-void  * importAndExport(HashMap* ,HashMap*,TreeMap * , TreeMap *, HashMap * );
+void * importAndExport(HashMap* ,HashMap*,TreeMap * , TreeMap *, HashMap *, TreeMap *, TreeMap *, TreeMap * );
 
 int lower_than_string(void* , void* );
+
+int lower_than_int(void* , void* ); //This function compare 2 keys *int
 
 void searchByType(HashMap * );
 
@@ -49,12 +51,22 @@ poke_storage * create_pokemon_S(char * ,int , char *  , int  , int  );
 
 void * catchPokemon (HashMap * ,HashMap *,TreeMap * , TreeMap * , int , HashMap * );
 
-Pokedex * create_pokemon_P(char * , List * , char *  , char *  , char * ,int );
+Pokedex * create_pokemon_P(char * , List * , char *  , char *  , char * ,int  );
 
 void showPokemonInformation(Pokedex * );
 
 void getTypes(List *, char * );
 
+void  showPokedexNumber(TreeMap *); //Show pokemons from Pokedez (Poke Number, lower to higer)
+
+void showPokemonInfo2(Pokedex * ); //Show info from Pokedex, output
+
+void showPokeStorageHP(TreeMap *); //Show pokemons from storage (Health points, higher to lower)
+
+void showPokeStorageCP (TreeMap *); //Show pokemons from storage (Combat points, higher to lower)
+
+void showPokemonInfo3 (poke_storage *); //Show info from Storage, output
+
+
 
 #endif // funciones_h
-
