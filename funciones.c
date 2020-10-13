@@ -531,7 +531,7 @@ void * importAndExport(HashMap* PokedexMap, HashMap * pokeStorageMap, TreeMap * 
     }
 
      int id;
-    while(cont <= n){
+    while(cont < n){
         printf("Please enter the file name (n_n) ");
     char name[50]; //the name of the file that has the pokemon
     FILE * fp;
