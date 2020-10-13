@@ -45,11 +45,11 @@ int lower_than_string(void* , void* );
 
 int lower_than_int(void* , void* ); //This function compare 2 keys *int
 
-void searchByType(HashMap * );//search the pokemon by the desire type  
+void searchByType(HashMap * );//search the pokemon by the desire type
 
 poke_storage * create_pokemon_S(char * ,int , char *  , int  , int  );
 
-void * catchPokemon (HashMap * ,HashMap *,TreeMap * , TreeMap * , int , HashMap * );
+void * catchPokemon (HashMap * ,HashMap *,TreeMap * , TreeMap * , int , HashMap * ,TreeMap*,TreeMap*,TreeMap*);
 
 Pokedex * create_pokemon_P(char * , List * , char *  , char *  , char * ,int  );
 

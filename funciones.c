@@ -8,8 +8,8 @@ void showPokemonInformation(Pokedex * puchi){
   // this function is very important to our program, because it's used in almost all the functions that search by a category
     printf("\n");
     printf("Pokemon's name: %s\n", puchi->name); //print the name
-    printf("Amount of Pokemon in Storage: %d\n", puchi->amountOf_pokemon); //print the brand
-    printf("Pokemon's type(s):\n"); //print game types
+    printf("Amount of Pokemon in Storage: %d\n", puchi->amountOf_pokemon); //print the amount of pokemon in the storage
+    printf("Pokemon's type(s):\n"); //print the pokemon types
 
     char * type = first(puchi->types); //access to the List of types
 
@@ -20,10 +20,10 @@ void showPokemonInformation(Pokedex * puchi){
 
     }
 
-    printf("Pokemon's Previous Evolution: %s\n", puchi->prev_evolution);//print the min amount of players
-     printf("Pokemon's Next Evolution: %s\n", puchi->next_evolution);//print the min amount of players
-    printf("Pokemon's number on the Pokedex: %d\n", puchi->poke_number);//print the name of the Base Game
-   printf("Pokemon's Region: %s\n\n", puchi->region);//print the name of the Base Game
+    printf("Pokemon's Previous Evolution: %s\n", puchi->prev_evolution);//print the previous evolution
+     printf("Pokemon's Next Evolution: %s\n", puchi->next_evolution);//print the next evolution
+    printf("Pokemon's number on the Pokedex: %d\n", puchi->poke_number);//print the number of the pokemon
+   printf("Pokemon's Region: %s\n\n", puchi->region);//print the region of the pokemon
 
 
 
@@ -107,23 +107,25 @@ void searchByName(HashMap * pokeStorageMap){
     fflush(stdin);
     bool found = false;
 
-    // se crea una lista de pokemones y a la vez se busca en el pokeStorageMap con su respectivo nombre 
+    // se crea una lista de pokemon y a la vez se busca en el pokeStorageMap con su respectivo nombre
     List * listadepokemones = searchMap(pokeStorageMap,name_);
     poke_storage * pukistorage = first(listadepokemones);
+
+    if (pukistorage == NULL) {
+    printf( "\nWe could not find a Pokemon  :(\n\n");
+    return;}
 
     while(pukistorage != NULL){
 
         if(strcmp(pukistorage->name, name_) == 0){
-             // si se encuentra el nombre que ingreso el usuario, se muestra la informacion de combate del pokemon 
+             // si se encuentra el nombre que ingreso el usuario, se muestra la informacion de combate del pokemon
             showCombatInformation(pukistorage);
-            return;
-
         }
 
-        next(listadepokemones);
+        pukistorage = next(listadepokemones);
     }
-    // No se encuentró el pokemon buscado
-    printf("\nWe could not find a Pokemon  :(\n\n");
+    return;
+
 
     system("pause");
     system("cls");
@@ -132,7 +134,7 @@ void searchByName(HashMap * pokeStorageMap){
 
 void MostrarPokemonPokedex(HashMap * pokeStorageRegion){
     system("cls");
-    
+
    // el usuario ingresa la region a buscar
     printf("Please enter the region: ");
     char region_[50];
@@ -140,7 +142,7 @@ void MostrarPokemonPokedex(HashMap * pokeStorageRegion){
     scanf("%[^\n]s", region_);
     fflush(stdin);
     bool found = false;
- 
+
     // se crea una lista de pokemones por region y a la vez se busca que exista tal region
     List * listadepokemonesPorRegion = searchMap(pokeStorageRegion,region_);
     if (listadepokemonesPorRegion==NULL){
@@ -166,7 +168,7 @@ void MostrarPokemonPokedex(HashMap * pokeStorageRegion){
 
 void searchByType(HashMap * PokedexMap){
 
-//searches the games by types
+//searches the pokemon by types
     system("cls");
 
     printf("Please enter the name of the Type you are looking for: ");
@@ -208,7 +210,7 @@ void searchByType(HashMap * PokedexMap){
 
 void searchByNamePokedex(HashMap * PokedexMap){
 
-//Function that search by the name of the game, and if it happens to have extensions, prints them too
+//Function that search by the name of the pokemon
 
     system("cls");
 
@@ -238,7 +240,7 @@ void searchByNamePokedex(HashMap * PokedexMap){
 
 void getTypes(List * typesList, char * types){
 
-//function that get the different types of the game :)
+//function that get the different types of the pokemon :)
 
     char caracter[2] = ",";
     char * type;
@@ -267,7 +269,7 @@ void getTypes(List * typesList, char * types){
 }
 
 char * toString(int id){
-
+ //function that convert a string to a int
     int digitos = 0;
     int aux = id;
     int numAlreves = 0;
@@ -314,7 +316,7 @@ char * toString(int id){
 
 Pokedex * create_pokemon_P(char * name,  List * types, char *  prev_evolution, char *  next_evolution, char * region, int  poke_number){
 
-   //very important struct that creates a game with their categories
+   //very important function that creates a pokemon in the pokedex
 
     Pokedex * puchidex = (Pokedex *) malloc (sizeof(Pokedex));
     puchidex->name = name;
@@ -330,6 +332,7 @@ Pokedex * create_pokemon_P(char * name,  List * types, char *  prev_evolution, c
 }
 
 poke_storage * create_pokemon_S(char * name, int id, char *  gender,  int  combat_points, int  health_points){
+       //very important function that creates a pokemon in the storage
 
     poke_storage * puchidex = (poke_storage *) malloc (sizeof(poke_storage));
     puchidex->name = name;
@@ -341,7 +344,9 @@ poke_storage * create_pokemon_S(char * name, int id, char *  gender,  int  comba
 
 }
 
-void  * catchPokemon (HashMap * PokedexMap, HashMap * pokeStorageMap,TreeMap * pokeStorageTree, TreeMap * PokedexTree, int contid, HashMap * pokeStorageRegion) {
+void  * catchPokemon (HashMap * PokedexMap, HashMap * pokeStorageMap,TreeMap * pokeStorageTree, TreeMap * PokedexTree, int contid, HashMap * pokeStorageRegion,TreeMap * pokedexNumber, TreeMap *pokeStorageCP, TreeMap * pokeStorageHP  ) {
+
+
 
     if (mapsize(pokeStorageMap)>100){
         printf("Pokemon Storage is full.");
@@ -416,6 +421,10 @@ void  * catchPokemon (HashMap * PokedexMap, HashMap * pokeStorageMap,TreeMap * p
 
         if (searchMap(PokedexMap, name) == NULL){
             insertMap(PokedexMap, new_poke->name ,new_poke);
+            insertTreeMap(PokedexTree, new_poke->name ,new_poke);
+            insertTreeMap(pokedexNumber, &new_poke->poke_number ,new_poke); //Insert pokemon in PokeNumber(key) Tree Map type Pokedex
+            insertTreeMap(pokeStorageCP, &newPoke->combat_points, newPoke); //Insert pokemon in Combat Points(key) Tree Map type Storage
+            insertTreeMap(pokeStorageHP, &newPoke->health_points, newPoke); //Insert pokemon in Health Points(key) Tree Map type Storage
            if (searchMap(pokeStorageRegion, region) == NULL){
             List* pokelist = create_list();
             push_back(pokelist, new_poke);
@@ -504,6 +513,7 @@ void * importAndExport(HashMap* PokedexMap, HashMap * pokeStorageMap, TreeMap * 
 
 
     if(option == 1){
+
     int n;
     int cont = 0;
     printf("How many archives do you want to import? ");
@@ -519,10 +529,11 @@ void * importAndExport(HashMap* PokedexMap, HashMap * pokeStorageMap, TreeMap * 
         printf("Enter a valid value (integer number)\n");
         }
     }
+
      int id;
-    while(cont < n){
+    while(cont <= n){
         printf("Please enter the file name (n_n) ");
-    char name[50]; //the name of the file that has the games
+    char name[50]; //the name of the file that has the pokemon
     FILE * fp;
 
     do{
@@ -566,21 +577,19 @@ void * importAndExport(HashMap* PokedexMap, HashMap * pokeStorageMap, TreeMap * 
         poke_storage * newPoke = create_pokemon_S( name, id,  gender,   combat_points,   health_points);
 
 
+
+
         if (searchMap(PokedexMap, name) == NULL){
             insertMap(PokedexMap, new_poke->name ,new_poke);
-
             insertTreeMap(PokedexTree, new_poke->name ,new_poke);
             insertTreeMap(pokedexNumber, &new_poke->poke_number ,new_poke); //Insert pokemon in PokeNumber(key) Tree Map type Pokedex
             insertTreeMap(pokeStorageCP, &newPoke->combat_points, newPoke); //Insert pokemon in Combat Points(key) Tree Map type Storage
-            insertTreeMap(pokeStorageHP, &newPoke->health_points, newPoke); //Insert pokemon in Health Points(key) Tree Map type Storage 
-        }
-
-
-        if (searchMap(pokeStorageRegion, region) == NULL){
+            insertTreeMap(pokeStorageHP, &newPoke->health_points, newPoke); //Insert pokemon in Health Points(key) Tree Map type Storage
+           if (searchMap(pokeStorageRegion, region) == NULL){
             List* pokelist = create_list();
             push_back(pokelist, new_poke);
             insertMap(pokeStorageRegion, new_poke->region, pokelist);
-        }
+           }
 
         else {
             List* pokelist = searchMap(pokeStorageRegion,new_poke->region);
@@ -588,6 +597,8 @@ void * importAndExport(HashMap* PokedexMap, HashMap * pokeStorageMap, TreeMap * 
             Pokedex * pokeaux = searchMap(PokedexMap, name);
 
         }
+        }
+
 
 
         if (mapsize(pokeStorageMap)>100){
@@ -627,11 +638,11 @@ void * importAndExport(HashMap* PokedexMap, HashMap * pokeStorageMap, TreeMap * 
 
 
         }
-      cont++;
     }
+    cont++;
     }
 
-    printf("All the Pokemon were imported correctly (^_^) "); //message that pops out on the window if all the games were imported correctly
+    printf("All the Pokemon were imported correctly (^_^) "); //message that pops out on the window if all the pokemon were imported correctly
     system("pause");
     system("cls");
     printf("%d",id);
@@ -754,7 +765,7 @@ void showPokeStorageCP(TreeMap * treeCP){ //Show all pokemons from storage (Comb
     printf("\n");
 
     if (treeCP == NULL) return; // If tree is empty
-    poke_storage * pokeAux; //auxVar to save info and show it    
+    poke_storage * pokeAux; //auxVar to save info and show it
     pokeAux= lastTreeMap (treeCP); //gets the last value, higher from map
 
     while (pokeAux != NULL){
@@ -773,7 +784,7 @@ void showPokeStorageHP(TreeMap * treeHP){//Show all pokemons from storage (Healt
     pokeAux= lastTreeMap (treeHP);  //gets the last value, higher from map
 
     while (pokeAux != NULL){
-        showPokemonInfo3 (pokeAux); 
+        showPokemonInfo3 (pokeAux);
         pokeAux= backTreeMap (treeHP); //Previous value, lower than current
     }
 

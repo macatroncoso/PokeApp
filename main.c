@@ -26,7 +26,7 @@ int main()
 
 
     //our menu to print all our options :D
-    printf("Welcome to the Unicorn's PokeApp (n _ n) What would you like to do?  \n\n");
+    printf("\nWelcome to the Unicorn's PokeApp (n _ n) What would you like to do?  \n\n");
     printf("Option 1 <3 : Import and/or Export games from a file \n");
     printf("Option 2 <3 : Catch a Pokemon! \n");
     printf("Option 3 <3 : Search Pokemon by type/s \n");
@@ -48,7 +48,7 @@ int main()
         switch(option){
             case 1: contid = importAndExport(PokedexMap,pokeStorageMap,PokedexTree,pokeStorageTree,pokeStorageRegion,pokedexNumber,pokeStorageHP,pokeStorageCP);
             break;
-            case 2:  contid = catchPokemon (PokedexMap,pokeStorageMap,PokedexTree,pokeStorageTree,contid,pokeStorageRegion );
+            case 2:  contid = catchPokemon (PokedexMap,pokeStorageMap,PokedexTree,pokeStorageTree,contid,pokeStorageRegion,pokedexNumber,pokeStorageCP,pokeStorageHP);
                     // printf ("%d",contid);
             break;
             case 3: searchByType(PokedexMap);
@@ -63,7 +63,7 @@ int main()
             break;
             case 8: showPokeStorageHP(pokeStorageHP); //Print pokemons from Storage, ordered from higher to lower (key= Health Points)
             break;
-            case 9: ReleasePokemon(PokedexMap, pokeStorageMap); //release the pokemon by the id 
+            case 9: ReleasePokemon(PokedexMap, pokeStorageMap); //release the pokemon by the id
             break;
             case 10: MostrarPokemonPokedex(pokeStorageRegion);
             break;
