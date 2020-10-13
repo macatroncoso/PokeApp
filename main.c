@@ -63,6 +63,8 @@ int main()
             break;
             case 8: showPokeStorageHP(pokeStorageHP); //Print pokemons from Storage, ordered from higher to lower (key= Health Points)
             break;
+            case 9: ReleasePokemon(PokedexMap, pokeStorageMap); //release the pokemon by the id 
+            break;
             case 10: MostrarPokemonPokedex(pokeStorageRegion);
             break;
 
