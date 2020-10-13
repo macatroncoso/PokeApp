@@ -504,13 +504,23 @@ void * importAndExport(HashMap* PokedexMap, HashMap * pokeStorageMap, TreeMap * 
 
 
     if(option == 1){
-    int howmany;
+    int n;
     int cont = 0;
     printf("How many archives do you want to import? ");
-    scanf("%d",&howmany);
-
+    while(1){
+        char buffer[3];
+        fflush(stdin);
+        memset(buffer,0,3);
+        fread(buffer, 2, 1, stdin);
+        n = atoi(buffer);
+        if(n > cont && n< 100){
+            break;
+        }else{
+        printf("Enter a valid value (integer number)\n");
+        }
+    }
      int id;
-    while(cont < howmany){
+    while(cont < n){
         printf("Please enter the file name (n_n) ");
     char name[50]; //the name of the file that has the games
     FILE * fp;
